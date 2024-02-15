@@ -121,7 +121,7 @@ namespace StudentAttendanceSystem.Controllers
             _db.Remove(model);
             _db.SaveChanges();
 
-            return RedirectToAction("Index", new { secId = student.Id });
+            return RedirectToAction("Index", new { secId = student.SectionId });
         }
     }
 }
