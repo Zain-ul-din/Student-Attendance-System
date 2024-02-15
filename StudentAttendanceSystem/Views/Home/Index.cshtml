@@ -1,0 +1,58 @@
+﻿@model List<ClassModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="d-flex py-2 px-1">
+    <div>
+        <h2>Class List</h2>
+    </div>
+    <div class="ml-auto">
+        <a asp-controller="Home" asp-action="Create" class="btn btn-success">Add New Class</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped center-table">
+
+    <thead>
+        <tr>
+            <th>
+                Class Id
+            </th>
+            <th>
+                Class 
+            </th>
+            <Th>
+                Edit Action
+            </Th>
+            <th>
+                Delete Action
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(ClassModel cls in Model)
+        {
+            <tr>
+                <td>@cls.Id</td>
+                <td>
+                    <a class="text-primary text-decoration-underline cursor-pointer hover-opacity-80"
+                        asp-action="Index" asp-controller="Class" asp-route-classId="@cls.Id"
+                    >
+                        @cls.Name
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Home" asp-route-slug="@cls.Id"  class="btn btn-primary">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-controller="Home" asp-route-slug="@cls.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+

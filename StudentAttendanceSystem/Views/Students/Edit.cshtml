@@ -1,0 +1,41 @@
+﻿@model StudentModel
+
+<form method="post">
+    <div class="border p-2 mt-4">
+        <div class="row pb-2">
+            <h2>Update Student</h2>
+        </div>
+
+        <input asp-for="Id" hidden />
+        <input asp-for="SectionId" hidden />
+
+        <div class="mb-3 p-1">
+            <label asp-for="Name" class="p-0 my-2"></label>
+            <input asp-for="Name" type="text" class="form-control" placeholder="Enter class Name" />
+            <span asp-validation-for="Name" class="pt-1 text-danger"></span>
+        </div>
+
+        <div class="mb-3 p-1">
+            <label asp-for="RollNumber" class="p-0 my-2"></label>
+            <input asp-for="RollNumber" type="text" class="form-control" placeholder="Enter class Name" />
+            <span asp-validation-for="RollNumber" class="pt-1 text-danger"></span>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+
+        <div class="d-flex gap-1">
+            <button type="submit" class="btn btn-primary">
+                Update
+            </button>
+            <a asp-controller="Students" asp-action="Index" asp-route-secId="@ViewBag.SecId" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -1,0 +1,50 @@
+﻿@model AttendanceViewModel
+
+<h2>Submit Attendance</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="AttendanceDate">Attendance Date:</label>
+        @*<input asp-for="" class="form-control" readonly />*@
+    </div>
+
+    <input hidden asp-for="@Model.Section.Id" value="@Model.Section.Id" />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Id</th>
+                <th>Student Name</th>
+                <th>Roll Number</th>
+                <th>Is Present</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Section.Students.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Section.Students[i].Id</td>
+                    <td>@Model.Section.Students[i].Name</td>
+                    <td>@Model.Section.Students[i].RollNumber</td>
+                    <td>
+                        <div class="form-check">
+                            <input type="hidden" asp-for="@Model.AttendanceModels[i].StudentId" value="@Model.Section.Students[i].Id" />
+                            <input class="form-check-input" type="checkbox" asp-for="@Model.AttendanceModels[i].IsPresent" />
+                            <label class="form-check-label" for="Model.AttendanceModels[@i].IsPresent">Present</label>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @*<input type="hidden" asp-for="" />*@
+    <div asp-validation-summary="All" class="text-danger" data-valmsg-for="AttendanceModels"></div>
+    <button type="submit" class="btn btn-primary">Submit Attendance</button>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

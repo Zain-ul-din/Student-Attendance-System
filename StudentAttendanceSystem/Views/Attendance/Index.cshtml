@@ -1,0 +1,63 @@
+﻿@model AttendanceHistoryViewModel
+
+<div class="d-flex py-2 px-1">
+    <div>
+        <h3>Attendance History of @Model.Section.Class?.Name - @Model.Section.Name</h3>
+    </div>
+    <div class="ml-auto">
+        <a asp-controller="Attendance" asp-action="Create" asp-route-secId="@ViewBag.SecId" class="btn btn-success">Submit New Attendance</a>
+    </div>
+</div>
+
+@if(Model.Attendances.Count == 0)
+{
+    <div class="card p-2 my-3 text-center">
+        No Attendance Added So Far
+    </div>
+}
+
+
+@foreach(var attendance in Model.Attendances)
+{
+    <div class="card p-2 my-3">
+        <h6>Marked At @attendance.Date.ToString()</h6>
+        <table class="table table-bordered table-striped center-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Student Id</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                    <th>Edit Action</th>
+                    <th>Delete Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var entry in attendance.Attendances)
+                {
+                    <tr>
+                        <td>@entry.Id</td>
+                        <td>@entry.StudentId</td>
+                        <td>@entry.Student?.Name</td>
+                        <td>
+                            @if(entry.IsPresent)
+                            {
+                                <span class="card bg-primary text-white">Present</span>
+                            }
+                            else
+                            {
+                                <span class="card bg-danger text-white">Absent</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Attendance" asp-route-slug="@entry.Id" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-controller="Attendance" asp-route-slug="@entry.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

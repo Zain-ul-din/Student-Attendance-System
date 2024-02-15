@@ -1,0 +1,72 @@
+﻿@model StudentsViewModel
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center">
+        <div class="d-flex flex-column">
+            <h2>Class Information</h2>
+            <ul class="list-unstyled px-1 mt-3">
+                <li class="text-black text-xl-start"><strong>Class:</strong> @Model.Section.Class?.Name</li>
+                <li class="text-black text-xl-start"><strong>Section:</strong> @Model.Section.Name</li>
+            </ul>
+        </div>
+        <span class="ml-auto">
+            <a asp-controller="Students" asp-action="Create" asp-route-secId="@Model.Section.Id" class="btn btn-success">Add New Student</a>
+        </span>
+    </div>
+
+    @*Render students here*@
+
+    <table class="table table-bordered table-striped center-table">
+        <thead>
+            <tr>
+                <th>Student Id</th>
+                <th>Student Name</th>
+                <th>Student RollNo</th>
+                <th>Section Id</th>
+                <th>Attendences</th>
+                <th>Edit Action</th>
+                <th>Delete Action</th>
+            </tr>
+            <tbody>
+            @if(Model.Students != null)
+            {
+               @foreach(StudentModel student in Model.Students)
+               {
+                   <tr>
+                       <td>
+                           @student.Id
+                       </td>
+                       <td>
+                           @student.Name
+                       </td>
+                       <td>
+                           @student.RollNumber
+                       </td>
+                       <td>
+                           @student.SectionId
+                       </td>
+                       <td>
+                            <a asp-action="Attendance" asp-controller="Students" asp-route-stdId="@student.Id" class="btn btn-secondary">
+                                View Attendance
+                            </a>
+                       </td>
+                       <td>
+                           <a asp-action="Edit" asp-controller="Students" asp-route-stdId="@student.Id" class="btn btn-primary">Edit</a>
+                       </td>
+                       <td>
+                            <a asp-action="Delete" asp-controller="Students" asp-route-stdId="@student.Id" class="btn btn-danger">Delete</a>
+                       </td>
+                   </tr>
+               }
+            }
+
+            @if (Model.Students == null || Model.Students.Count == 0)
+            {
+                <td colspan="6">
+                    No Student Found
+                </td>
+            }
+            </tbody>
+        </thead>
+    </table>
+</div>

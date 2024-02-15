@@ -1,0 +1,52 @@
+﻿@model AttendanceModel
+
+@{
+    ViewData["Title"] = "Edit Attendance";
+}
+
+<form method="post">
+
+    <input asp-for="Id" value="@Model.Id" hidden />
+    <input asp-for="StudentId"  hidden value="@Model.StudentId" />
+
+    <div class="border p-2 mt-4">
+        <div class="row pb-2">
+            <h2>Edit '@Model.Student?.Name' Attendance</h2>
+        </div>
+        <div class="mb-3 p-1">
+            <label asp-for="AttendanceDate" class="p-0 my-2"></label>
+            <input asp-for="AttendanceDate"
+                    value="@Model.AttendanceDate.ToString("yyyy-MM-ddTHH:mm:ss")"
+                    class="form-control"
+                    placeholder="Enter class Name" disabled readonly 
+             />
+            <span asp-validation-for="AttendanceDate" class="pt-1 text-danger"></span>
+        </div>
+
+        <div class="mb-3 p-1">
+            <label asp-for="IsPresent" class="p-0 my-2"></label>
+            <input 
+                   asp-for="IsPresent"
+                   placeholder="Enter class Name" />
+            <span asp-validation-for="IsPresent" class="pt-1 text-danger"></span>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+
+        <div class="d-flex gap-1">
+            <button type="submit" class="btn btn-primary">
+                Edit
+            </button>
+            <a asp-controller="Attendance" asp-action="Index" asp-route-secId="@Model.Student?.SectionId" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

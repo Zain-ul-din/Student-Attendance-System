@@ -1,0 +1,42 @@
+﻿@model StudentAttendanceViewModel
+
+<h2>Attendance of @Model.Student.Name - @Model.Student.Id</h2>
+
+<table class="table mt-5 table-bordered table-striped center-table">
+    <thead>
+        <tr>
+            <th>Student Id</th>
+            <th>Student Name</th>
+            <th>Attendance Date</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var entry in Model.Attendances)
+        {
+            <tr>
+                <td>@entry.StudentId</td>
+                <td>@Model.Student?.Name</td>
+                <td>@entry.AttendanceDate.ToString()</td>
+                <td>
+                    @if (entry.IsPresent)
+                    {
+                        <span class="card bg-primary text-white">Present</span>
+                    }
+                    else
+                    {
+                        <span class="card bg-danger text-white">Absent</span>
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Attendance" asp-action="Edit" asp-all-route-slug="@entry.Id" class="btn btn-primary">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Attendance" asp-action="Edit" asp-all-route-slug="@entry.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

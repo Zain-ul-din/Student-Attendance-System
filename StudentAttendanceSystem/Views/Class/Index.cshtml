@@ -1,0 +1,72 @@
+﻿@model ClassModel
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center">
+        <div class="d-flex flex-column">
+            <h2>Class Information</h2>
+            <ul class="list-unstyled px-1 mt-3">
+                <li class="text-black text-xl-start"><strong>ID:</strong> @Model.Id</li>
+                <li class="text-black text-xl-start"><strong>Name:</strong> @Model.Name</li>
+            </ul>
+        </div>
+        <span class="ml-auto d-flex flex-column gap-2">
+            <a asp-controller="Class" asp-action="Create" asp-route-classId="@ViewBag.ClassId" class="btn btn-success">Add New Section</a>
+        </span>
+    </div>
+
+    @if (Model.Sections != null && Model.Sections.Any())
+    {
+        <h3>Sections</h3>
+
+        <table class="table table-bordered table-striped center-table">
+            <thead>
+                <tr>
+                    <th>
+                        Section Id
+                    </th>
+                    <th>
+                        Section
+                    </th>
+                    <th>
+                        Manage Students
+                    </th>
+                    <Th>
+                        Edit Action
+                    </Th>
+                    <th>
+                        Delete Action
+                    </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (SectionModel sec in Model.Sections)
+                {
+                    <tr>
+                        <td>@sec.Id</td>
+                        <td>
+                            <a class="text-primary text-decoration-underline cursor-pointer hover-opacity-80"
+                               asp-action="Index" asp-controller="Attendance" asp-route-secId="@sec.Id">
+                                @sec.Name
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" asp-action="Index" asp-controller="Students" asp-route-secId="@sec.Id">Manage Students</a>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Class" asp-route-slug="@sec.Id" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-controller="Class" asp-route-slug="@sec.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center mt-5 text-info text-xl-center">No sections available for this class.</p>
+    }
+</div>
