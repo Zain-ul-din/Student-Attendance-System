@@ -27,7 +27,7 @@ namespace StudentAttendanceSystem.Controllers
             var attendances = _db.Attendances
                 .Include(a => a.Student)
                 .Where(a =>  a.Student.SectionId == secId) 
-                .GroupBy(a => new { a.AttendanceDate.Date, a.StudentId })
+                .GroupBy(a => a.AttendanceDate.Date)
                 .Select(group => new AttendanceGroup {
                     Date = group.Key.Date,
                     Attendances = group.ToList()
@@ -100,7 +100,7 @@ namespace StudentAttendanceSystem.Controllers
             _db.Entry(model).Property(p => p.AttendanceDate).IsModified = false;
             _db.SaveChanges();
 
-            return RedirectToAction("Index", new { secId = student.Id });
+            return RedirectToAction("Index", new { secId = student.SectionId });
         }
 
         public IActionResult Delete(int slug)
