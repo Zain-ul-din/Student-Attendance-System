@@ -3,13 +3,13 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
     public class SectionModel
     {
         /*
          * PK
-        */ 
+        */
         public int Id { get; set; }
 
         /*

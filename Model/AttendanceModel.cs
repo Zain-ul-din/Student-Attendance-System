@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
-    
+
     public class AttendanceModel
     {
         /*

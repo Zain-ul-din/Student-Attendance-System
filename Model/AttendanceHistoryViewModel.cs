@@ -1,7 +1,8 @@
-﻿using StudentAttendanceSystem.Util;
+﻿using Models.Helpers;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
+    
     public class AttendanceHistoryViewModel
     {
         public SectionModel Section { get; set; }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentAttendanceSystem.Models;
+using Models;
 
 namespace StudentAttendanceSystem.Data
 {

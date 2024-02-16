@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Models;
+using Models.Helpers;
 using StudentAttendanceSystem.Data;
-using StudentAttendanceSystem.Models;
-using StudentAttendanceSystem.Util;
+
 
 namespace StudentAttendanceSystem.Controllers
 {
@@ -107,7 +108,9 @@ namespace StudentAttendanceSystem.Controllers
         {
             if (slug == null || slug == 0) return NotFound();
             var model = _db.Attendances.Find(slug);
-            model.Student = _db.Students.FirstOrDefault(s => s.Id == model.StudentId);
+            if (model == null) return NotFound();
+            model.Student = _db.Students
+                .FirstOrDefault(s => s.Id == model.StudentId);
             if (model == null) return NotFound();
             return View(model);
         }

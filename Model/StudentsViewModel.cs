@@ -1,4 +1,4 @@
-﻿namespace StudentAttendanceSystem.Models
+﻿namespace Models
 {
     public class StudentsViewModel
     {

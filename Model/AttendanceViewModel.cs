@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
     public class AttendanceViewModel
     {

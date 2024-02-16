@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
 
     [Index(nameof(Name), IsUnique = true)]
@@ -10,9 +10,9 @@ namespace StudentAttendanceSystem.Models
     {
         /*
          * PK 
-        */ 
+        */
         public int Id { get; set; }
-        
+
         /*
          * Name of the class
         */
@@ -41,7 +41,7 @@ namespace StudentAttendanceSystem.Models
         /*
          * Generates Seed Data
         */
-        public static ClassModel[] GenerateSeedData ()
+        public static ClassModel[] GenerateSeedData()
         {
             return new ClassModel[]
             {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentAttendanceSystem.Data;
-using StudentAttendanceSystem.Models;
+using Models;
 
 namespace StudentAttendanceSystem.Controllers
 {

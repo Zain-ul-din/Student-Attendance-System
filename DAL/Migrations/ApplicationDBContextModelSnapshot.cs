@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentAttendanceSystem.Data;
 
 #nullable disable
 
-namespace StudentAttendanceSystem.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240215142647_init")]
-    partial class init
+    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +22,7 @@ namespace StudentAttendanceSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.AttendanceModel", b =>
+            modelBuilder.Entity("Models.AttendanceModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +56,7 @@ namespace StudentAttendanceSystem.Migrations
                     b.ToTable("Attendances");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.ClassModel", b =>
+            modelBuilder.Entity("Models.ClassModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +109,7 @@ namespace StudentAttendanceSystem.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.SectionModel", b =>
+            modelBuilder.Entity("Models.SectionModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +132,7 @@ namespace StudentAttendanceSystem.Migrations
                     b.ToTable("Sections");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.StudentModel", b =>
+            modelBuilder.Entity("Models.StudentModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,17 +168,17 @@ namespace StudentAttendanceSystem.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.AttendanceModel", b =>
+            modelBuilder.Entity("Models.AttendanceModel", b =>
                 {
-                    b.HasOne("StudentAttendanceSystem.Models.ClassModel", null)
+                    b.HasOne("Models.ClassModel", null)
                         .WithMany("Attendances")
                         .HasForeignKey("ClassModelId");
 
-                    b.HasOne("StudentAttendanceSystem.Models.SectionModel", null)
+                    b.HasOne("Models.SectionModel", null)
                         .WithMany("Attendances")
                         .HasForeignKey("SectionModelId");
 
-                    b.HasOne("StudentAttendanceSystem.Models.StudentModel", "Student")
+                    b.HasOne("Models.StudentModel", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -190,9 +187,9 @@ namespace StudentAttendanceSystem.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.SectionModel", b =>
+            modelBuilder.Entity("Models.SectionModel", b =>
                 {
-                    b.HasOne("StudentAttendanceSystem.Models.ClassModel", "Class")
+                    b.HasOne("Models.ClassModel", "Class")
                         .WithMany("Sections")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -201,13 +198,13 @@ namespace StudentAttendanceSystem.Migrations
                     b.Navigation("Class");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.StudentModel", b =>
+            modelBuilder.Entity("Models.StudentModel", b =>
                 {
-                    b.HasOne("StudentAttendanceSystem.Models.ClassModel", null)
+                    b.HasOne("Models.ClassModel", null)
                         .WithMany("Students")
                         .HasForeignKey("ClassModelId");
 
-                    b.HasOne("StudentAttendanceSystem.Models.SectionModel", "Section")
+                    b.HasOne("Models.SectionModel", "Section")
                         .WithMany("Students")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -216,7 +213,7 @@ namespace StudentAttendanceSystem.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.ClassModel", b =>
+            modelBuilder.Entity("Models.ClassModel", b =>
                 {
                     b.Navigation("Attendances");
 
@@ -225,7 +222,7 @@ namespace StudentAttendanceSystem.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("StudentAttendanceSystem.Models.SectionModel", b =>
+            modelBuilder.Entity("Models.SectionModel", b =>
                 {
                     b.Navigation("Attendances");
 

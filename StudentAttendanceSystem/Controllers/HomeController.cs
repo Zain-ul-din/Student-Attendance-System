@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentAttendanceSystem.Data;
-using StudentAttendanceSystem.Models;
+using Models;
 using System.Diagnostics;
 
 namespace StudentAttendanceSystem.Controllers

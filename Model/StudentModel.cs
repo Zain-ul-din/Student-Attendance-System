@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentAttendanceSystem.Models
+namespace Models
 {
 
     [Index(nameof(RollNumber), IsUnique = true)]
