@@ -28,6 +28,12 @@
                 <th>Delete Action</th>
             </tr>
             <tbody>
+            @if (Model.Students == null || Model.Students.Count == 0)
+            {
+                <td colspan="7">
+                    No Student Found
+                </td>
+            }
             @if(Model.Students != null)
             {
                @foreach(StudentModel student in Model.Students)
@@ -60,12 +66,7 @@
                }
             }
 
-            @if (Model.Students == null || Model.Students.Count == 0)
-            {
-                <td colspan="6">
-                    No Student Found
-                </td>
-            }
+            
             </tbody>
         </thead>
     </table>
