@@ -35,11 +35,6 @@ namespace StudentAttendanceSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         public IActionResult Edit(int? slug)
         {
             if(slug == null || slug == 0) return RedirectToAction("Index");
