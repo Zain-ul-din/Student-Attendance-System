@@ -1,4 +1,4 @@
-## Student Management System using EF Core
+## Student Attendance Management System using EF Core
 
 **To Get Started:**
 
