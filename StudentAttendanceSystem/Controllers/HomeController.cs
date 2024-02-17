@@ -2,43 +2,37 @@ using Microsoft.AspNetCore.Mvc;
 using StudentAttendanceSystem.Data;
 using Models;
 using System.Diagnostics;
+using DAL.Repositories;
+using BLL.Util;
 
 namespace StudentAttendanceSystem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ApplicationDBContext db) : Controller
     {
-
-        private readonly ApplicationDBContext _db;
-
-        public HomeController(ApplicationDBContext db)
-        {
-            _db = db;
-        }
-
-        public IActionResult Index()
-        {
-            List<ClassModel> classes = _db.Classes.ToList<ClassModel>();
-            return View(classes);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
+        
+        public IActionResult Index() => View(db.GetAllClasses());
+        
+        public IActionResult Create() => View();
 
         [HttpPost]
         public IActionResult Create(ClassModel model)
         {
             if (!ModelState.IsValid) return View();
-            _db.Classes.Add(model);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            var res = db.AddClass(model);
+
+            if(res == DBUpdateStatus.Success)
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewData["DBUpdateStatus"] = res.GetMsg();
+            return View();
         }
 
         public IActionResult Edit(int? slug)
         {
-            if(slug == null || slug == 0) return RedirectToAction("Index");
-            ClassModel? model = _db.Classes.Find(slug);
+            var model = db.GetClassById(slug);
             return model != null ? View(model) : NotFound();
         }
 
@@ -46,30 +40,40 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Edit(ClassModel model)
         {
             if (!ModelState.IsValid) return View();
-            _db.Classes.Update(model);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            var res = db.UpdateClass(model);
+
+            if(res == DBUpdateStatus.Success)
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewData["DBUpdateStatus"] = res.GetMsg();
+            return View();
         }
 
         public IActionResult Delete(int? slug)
         {
-            if (slug == null || slug == 0) return RedirectToAction("Index");
-            ClassModel? model = _db.Classes.Find(slug);
+            var model = db.GetClassById(slug);
             return model != null ? View(model) : NotFound();
         }
         
         [HttpPost]
         public IActionResult Delete(ClassModel model)
         {
-            _db.Classes.Remove(model);
-            _db.SaveChanges();
+            var res = db.DeleteClass(model);
+
+            if (res == DBUpdateStatus.Success)
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewData["DBUpdateStatus"] = res.GetMsg();
             return RedirectToAction("Index");
         }
 
-        public IActionResult About()
-        {
-            return View();
-        }
+        public IActionResult About() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

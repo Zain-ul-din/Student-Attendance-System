@@ -43,7 +43,7 @@ namespace Models
         */
         public static ClassModel[] GenerateSeedData()
         {
-            return new ClassModel[]
+            return new []
             {
                 new ClassModel { Id = 1, Attendances = [], Sections = [], Name = "10th Class"  },
                 new ClassModel { Id = 2, Attendances = [], Sections = [], Name = "9th Class"  },
