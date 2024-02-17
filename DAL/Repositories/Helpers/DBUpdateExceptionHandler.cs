@@ -13,8 +13,10 @@ namespace DAL.Repositories.Helpers
             // https://stackoverflow.com/questions/3967140/duplicate-key-exception-from-entity-framework
             //
             SqlException? innerException = ex.InnerException as SqlException;
-            if (innerException != null)
-                return DBUpdateStatus.DuplicateEntry;
+            if (
+                innerException != null
+                && (innerException.Number == 2627 || innerException.Number == 2601)
+            ) return DBUpdateStatus.DuplicateEntry;
             
             return DBUpdateStatus.FailUnkown;
         }

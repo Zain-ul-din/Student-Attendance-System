@@ -2,22 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using StudentAttendanceSystem.Data;
 using Models;
+using DAL.Repositories;
+using BLL.Util;
 
 namespace StudentAttendanceSystem.Controllers
 {
-    public class ClassController : Controller
+    public class ClassController(ApplicationDBContext db) : Controller
     {
-        private readonly ApplicationDBContext _db;
-        public ClassController(ApplicationDBContext db)
-        {
-            _db = db;
-        }
-
         public IActionResult Index(int? classId)
         {
-            ClassModel? model = _db.Classes
-                .Include(c => c.Sections)
-                .FirstOrDefault(c => c.Id == classId);
+            ClassModel? model = db.GetClassByIdIncludingSections(classId);
             if (model == null) return NotFound();
             ViewBag.ClassId = classId;
             return View(model);
@@ -33,15 +27,21 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Create(SectionModel model)
         {
            if (!ModelState.IsValid) return View();
-           _db.Sections.Add(model);
-           _db.SaveChanges();
-           return RedirectToAction("Index", new { classId = model.ClassId });
+           var res = db.CreateSection(model);
+
+           if(res == DBUpdateStatus.Success)
+           {
+              db.SaveChanges();
+              return RedirectToAction("Index", new { classId = model.ClassId });
+           }
+    
+           ViewData["DBUpdateStatus"] = res.GetMsg();
+           return View();
         }
 
         public IActionResult Edit(int? slug)
         {
-            if(slug == null || slug == 0) return NotFound();
-            SectionModel? secModel =  _db.Sections.Find(slug);
+            SectionModel? secModel = db.GetSectionById(slug);
             return secModel != null ?  View(secModel) : NotFound();
         }
 
@@ -49,24 +49,37 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Edit(SectionModel model)
         {
             if (!ModelState.IsValid) return View();
-            _db.Sections.Update(model);
-            _db.SaveChanges();
-            return RedirectToAction("Index", new { classId = model.ClassId });
+            var res = db.UpdateSection(model);
+
+            if (res == DBUpdateStatus.Success)
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index", new { classId = model.ClassId });
+            }
+
+            ViewData["DBUpdateStatus"] = res.GetMsg();
+            return View();
         }
 
         public IActionResult Delete(int? slug)
         {
-            if (slug == null || slug == 0) return NotFound();
-            SectionModel? model = _db.Sections.Find(slug);
-            return model != null ? View(model) : NotFound();
+            SectionModel? secModel = db.GetSectionById(slug);
+            return secModel != null ? View(secModel) : NotFound();
         }
 
         [HttpPost]
         public IActionResult Delete(SectionModel model)
         {
-            _db.Sections.Remove(model);
-            _db.SaveChanges();
-            return RedirectToAction("Index", new { classId = model.ClassId });
+            var res = db.DeleteSection(model);
+
+            if (res == DBUpdateStatus.Success)
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index", new { classId = model.ClassId });
+            }
+
+            ViewData["DBUpdateStatus"] = res.GetMsg();
+            return View();
         }
     }
 }

@@ -56,6 +56,18 @@ namespace DAL.Repositories
 
             return DBUpdateStatus.Success;
         }
+
+        public static ClassModel? GetClassByIdIncludingSections(
+            this ApplicationDBContext context,
+            int? id
+        )
+        {
+            if(id == null || id == 0) return null;
+            return context.Classes
+                .Include(c => c.Sections)
+                .FirstOrDefault(c => c.Id == id);
+        }
+
     }
 }
 
