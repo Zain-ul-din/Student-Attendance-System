@@ -19,14 +19,11 @@ namespace StudentAttendanceSystem.Controllers
         {
             if (!ModelState.IsValid) return View();
             var res = db.AddClass(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
             if(res == DBUpdateStatus.Success)
-            {
-                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
 
-            ViewData["DBUpdateStatus"] = res.GetMsg();
             return View();
         }
 
@@ -41,14 +38,11 @@ namespace StudentAttendanceSystem.Controllers
         {
             if (!ModelState.IsValid) return View();
             var res = db.UpdateClass(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
             if(res == DBUpdateStatus.Success)
-            {
-                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
 
-            ViewData["DBUpdateStatus"] = res.GetMsg();
             return View();
         }
 
@@ -62,17 +56,14 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Delete(ClassModel model)
         {
             var res = db.DeleteClass(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
             if (res == DBUpdateStatus.Success)
-            {
-                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
 
-            ViewData["DBUpdateStatus"] = res.GetMsg();
             return RedirectToAction("Index");
         }
-
+    
         public IActionResult About() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -100,12 +100,12 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 5,
-                            Name = "7th History"
+                            Name = "6th Class"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "6th History"
+                            Name = "5th Class"
                         });
                 });
 

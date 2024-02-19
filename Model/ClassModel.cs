@@ -49,8 +49,8 @@ namespace Models
                 new ClassModel { Id = 2, Attendances = [], Sections = [], Name = "9th Class"  },
                 new ClassModel { Id = 3, Attendances = [], Sections = [], Name = "7th Class"  },
                 new ClassModel { Id = 4, Attendances = [], Sections = [], Name = "8th Class"  },
-                new ClassModel { Id = 5, Attendances = [], Sections = [], Name = "7th History"  },
-                new ClassModel { Id = 6, Attendances = [], Sections = [], Name = "6th History"  }
+                new ClassModel { Id = 5, Attendances = [], Sections = [], Name = "6th Class"  },
+                new ClassModel { Id = 6, Attendances = [], Sections = [], Name = "5th Class"  }
             };
         }
     }

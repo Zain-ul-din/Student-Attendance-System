@@ -115,8 +115,8 @@ namespace DAL.Migrations
                     { 2, "9th Class" },
                     { 3, "7th Class" },
                     { 4, "8th Class" },
-                    { 5, "7th History" },
-                    { 6, "6th History" }
+                    { 5, "6th Class" },
+                    { 6, "5th Class" }
                 });
 
             migrationBuilder.CreateIndex(

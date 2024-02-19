@@ -9,10 +9,13 @@ namespace DAL.Repositories
 
     public static class ClassRepository
     {
+
         public static List<ClassModel> GetAllClasses
             (this ApplicationDBContext context)
         {
-            return context.Classes.ToList<ClassModel>();
+            return context.Classes
+                .OrderBy(x => x.Id)
+                .ToList<ClassModel>();
         }
 
         public static DBUpdateStatus AddClass(
@@ -21,7 +24,10 @@ namespace DAL.Repositories
         )
         {
             try
-            { context.Classes.Add(model); } 
+            {
+                context.Classes.Add(model); 
+                context.SaveChanges();
+            } 
             catch (DbUpdateException ex) { return ex.GetExceptionStatus(); }
             return DBUpdateStatus.Success;
         }
@@ -40,7 +46,10 @@ namespace DAL.Repositories
             ClassModel model
         )
         {
-            try { context.Classes.Update(model); }
+            try { 
+                context.Classes.Update(model);
+                context.SaveChanges();
+            }
             catch (DbUpdateException ex) { return ex.GetExceptionStatus(); }
 
             return DBUpdateStatus.Success;
@@ -51,7 +60,10 @@ namespace DAL.Repositories
             ClassModel model 
         )
         {
-            try { context.Classes.Remove(model) ; }
+            try { 
+                context.Classes.Remove(model) ;
+                context.SaveChanges();
+            }
             catch (DbUpdateException ex) { return ex.GetExceptionStatus(); }
 
             return DBUpdateStatus.Success;

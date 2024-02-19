@@ -3,38 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Helpers;
 using StudentAttendanceSystem.Data;
-
+using DAL.Repositories;
+using BLL.Util;
 
 namespace StudentAttendanceSystem.Controllers
 {
-    public class AttendanceController : Controller
+    public class AttendanceController(ApplicationDBContext db) : Controller
     {
-        private readonly ApplicationDBContext _db;
-        public AttendanceController(ApplicationDBContext db)
-        {
-            _db = db;
-        }
 
         public IActionResult Index(int secId)
         {
-            var section = _db.Sections
-                .Include(s => s.Class)
-                .FirstOrDefault(s => s.Id == secId);
-
+            var section = db.GetSectionByIdIncludingClass(secId);
             if (section == null) return NotFound();
             
             ViewBag.SecId = secId;
 
-            var attendances = _db.Attendances
-                .Include(a => a.Student)
-                .Where(a =>  a.Student.SectionId == secId) 
-                .GroupBy(a => a.AttendanceDate.Date)
-                .Select(group => new AttendanceGroup {
-                    Date = group.Key.Date,
-                    Attendances = group.ToList()
-                })
-                .OrderByDescending(group => group.Date)
-                .ToList();
+            var attendances = db.GetAttendanceOfSection(secId);
 
             var model = new AttendanceHistoryViewModel
             {
@@ -45,22 +29,18 @@ namespace StudentAttendanceSystem.Controllers
             return View(model);
         }
 
-        public IActionResult Create(int secId)
+        public IActionResult Create(int? secId)
         {
-            if (secId == 0 || secId == null) return NotFound();
             ViewBag.SecId = secId;
-            var model = _db.Sections
-                .Include(s => s.Class)
-                .Include(s => s.Students)
-                .FirstOrDefault(s => s.Id == secId);
-
+            SectionModel? model = db.GetSectionByIdIncludingClassAndStudents(secId);
             if(model == null) return NotFound();
 
-            var attendanceModels = model.Students.Select(s => new AttendanceModel { StudentId = s.Id, IsPresent = false }).ToList();
+            var attendanceModels = model?.Students?
+                .Select(s => new AttendanceModel { StudentId = s.Id, IsPresent = false }).ToList();
             var viewModel = new AttendanceViewModel
             {
                 Section = model,
-                AttendanceModels = attendanceModels
+                AttendanceModels = attendanceModels ?? []
             };
 
             return View(viewModel);
@@ -72,10 +52,11 @@ namespace StudentAttendanceSystem.Controllers
             if (!ModelState.IsValid) return View(model);
             foreach (var attendance in model.AttendanceModels)
             {
-                // add server timestamp
-                attendance.AttendanceDate = DateTime.Now;
-                _db.Attendances.Add(attendance);
-                _db.SaveChanges();
+                var res = db.CreateAttendance(attendance);
+                if(res != DBUpdateStatus.Success)
+                {
+                    TempData["DBUpdateStatus"] = res.GetMsg();
+                }
             }
 
             return RedirectToAction("Index", new { secId = model.Section.Id });
@@ -83,10 +64,13 @@ namespace StudentAttendanceSystem.Controllers
 
         public IActionResult Edit(int slug)
         {
-            if(slug == null || slug == 0) return NotFound();
-            var model = _db.Attendances.Find(slug);
-            model.Student = _db.Students.FirstOrDefault(s => s.Id == model.StudentId);
-            if(model == null) return NotFound();
+            var model = db.GetAttendanceById(slug);
+            if (model == null) return NotFound();
+            
+            var student = db.GetAttendanceById(model.StudentId);
+            if (student == null) return NotFound();
+            
+            model.Student = db.GetStudentById(model.StudentId);
             return View(model);
         }
 
@@ -94,23 +78,23 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Edit(AttendanceModel model)
         {
             if (!ModelState.IsValid) return View();
-            var student = _db.Students.FirstOrDefault(s => s.Id == model.StudentId);
+            var student = db.GetStudentById(model.StudentId);
             if(student == null) return NotFound();
-                        
-            _db.Update(model);
-            _db.Entry(model).Property(p => p.AttendanceDate).IsModified = false;
-            _db.SaveChanges();
 
-            return RedirectToAction("Index", new { secId = student.SectionId });
+            var res = db.UpdateAttendance(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
+
+            if (res == DBUpdateStatus.Success)
+                return RedirectToAction("Index", new { secId = student.SectionId });
+                        
+            return View();
         }
 
         public IActionResult Delete(int slug)
         {
-            if (slug == null || slug == 0) return NotFound();
-            var model = _db.Attendances.Find(slug);
+            var model = db.GetAttendanceById(slug);
             if (model == null) return NotFound();
-            model.Student = _db.Students
-                .FirstOrDefault(s => s.Id == model.StudentId);
+            model.Student = db.GetStudentById(model.StudentId);
             if (model == null) return NotFound();
             return View(model);
         }
@@ -118,13 +102,16 @@ namespace StudentAttendanceSystem.Controllers
         [HttpPost]
         public IActionResult Delete(AttendanceModel model)
         {
-            var student = _db.Students.FirstOrDefault(s => s.Id == model.StudentId);
+            var student = db.GetStudentById(model.StudentId);
             if (student == null) return NotFound();
 
-            _db.Remove(model);
-            _db.SaveChanges();
+            var res = db.DeleteAttendance(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
-            return RedirectToAction("Index", new { secId = student.SectionId });
+            if (res == DBUpdateStatus.Success)
+                return RedirectToAction("Index", new { secId = student.SectionId });
+            
+            return View();
         }
     }
 }

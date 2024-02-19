@@ -28,14 +28,11 @@ namespace StudentAttendanceSystem.Controllers
         {
            if (!ModelState.IsValid) return View();
            var res = db.CreateSection(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
            if(res == DBUpdateStatus.Success)
-           {
-              db.SaveChanges();
               return RedirectToAction("Index", new { classId = model.ClassId });
-           }
     
-           ViewData["DBUpdateStatus"] = res.GetMsg();
            return View();
         }
 
@@ -50,14 +47,11 @@ namespace StudentAttendanceSystem.Controllers
         {
             if (!ModelState.IsValid) return View();
             var res = db.UpdateSection(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
             if (res == DBUpdateStatus.Success)
-            {
-                db.SaveChanges();
                 return RedirectToAction("Index", new { classId = model.ClassId });
-            }
 
-            ViewData["DBUpdateStatus"] = res.GetMsg();
             return View();
         }
 
@@ -71,14 +65,11 @@ namespace StudentAttendanceSystem.Controllers
         public IActionResult Delete(SectionModel model)
         {
             var res = db.DeleteSection(model);
+            TempData["DBUpdateStatus"] = res.GetMsg();
 
             if (res == DBUpdateStatus.Success)
-            {
-                db.SaveChanges();
                 return RedirectToAction("Index", new { classId = model.ClassId });
-            }
 
-            ViewData["DBUpdateStatus"] = res.GetMsg();
             return View();
         }
     }

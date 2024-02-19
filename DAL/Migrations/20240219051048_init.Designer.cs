@@ -12,7 +12,7 @@ using StudentAttendanceSystem.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240216121825_init")]
+    [Migration("20240219051048_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -103,12 +103,12 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 5,
-                            Name = "7th History"
+                            Name = "6th Class"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "6th History"
+                            Name = "5th Class"
                         });
                 });
 
